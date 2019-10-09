@@ -94,8 +94,8 @@ def depthFirstSearch(problem):
     # start by popping the initial node into the stack
     startNode = problem.getStartState()
     stack = util.Stack()
-    emptyPath = []
-    stack.push((startNode, emptyPath))
+    initialPath = []
+    stack.push((startNode, initialPath))
 
     # used to keep track of what nodes were visited and
     nodesVisited = []
@@ -126,8 +126,8 @@ def breadthFirstSearch(problem):
  # start by popping the initial node into the q
     startNode = problem.getStartState()
     q = util.Queue()
-    emptyPath = []
-    q.push((startNode,emptyPath))
+    initialPath = []
+    q.push((startNode, initialPath))
     
     # used to keep track of what nodes were visited and
     nodesVisited = []
@@ -148,7 +148,27 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    return breadthFirstSearch(problem)
+    startNode = problem.getStartState()
+    pQ = util.PriorityQueue()
+    initialPath = []
+    initialCost = 0
+    pQ.update((startNode, initialPath, initialCost), 0)
+
+    nodesVisited = []
+
+    while not pQ.isEmpty():
+
+        curNode, pathTaken, curCost = pQ.pop()
+        if(problem.isGoalState(curNode)):
+            return pathTaken
+        
+        if(curNode not in nodesVisited):
+            nodesVisited.append(curNode)
+            neighbors = problem.getSuccessors(curNode)
+            for neighbor in neighbors:
+                tempPath = pathTaken + [neighbor[1]]
+                tempCost = curCost + neighbor[2]
+                pQ.update((neighbor[0], tempPath, tempCost), tempCost)
 
 
 def nullHeuristic(state, problem=None):
@@ -162,7 +182,7 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    
 
 
 # Abbreviations

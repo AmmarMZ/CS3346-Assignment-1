@@ -339,7 +339,9 @@ class CornersProblem(search.SearchProblem):
                 for i in state[1]:
                     if(i != (nextx, nexty)):
                         edges.append(i)
-                successors.append((((nextx, nexty), edges), action, 1))
+                tempNode = (nextx, nexty)
+                tempSucc = (tempNode, edges)
+                successors.append((tempSucc, action, 1))
 
 
 
@@ -373,11 +375,22 @@ def cornersHeuristic(state, problem):
     shortest path from the state to a goal of the problem; i.e.  it should be
     admissible (as well as consistent).
     """
-    corners = problem.corners # These are the corner coordinates
-    walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
+    if len(state[1]) == 0:
+        return 0
 
-    "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+    heuristic = []
+
+    for i in range(len(state[1])):
+        curState = state[1][i]
+        dx = curState[0] - state[0][0]
+        dy = curState[1] - state[0][1]
+        dx = abs(dx)
+        dy = abs(dy)
+        heuristic.append(dx + dy)
+
+
+    bestGuess = max(heuristic)
+    return bestGuess
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"

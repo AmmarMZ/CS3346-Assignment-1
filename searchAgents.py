@@ -339,6 +339,7 @@ class CornersProblem(search.SearchProblem):
                 for i in state[1]:
                     if(i != (nextx, nexty)):
                         edges.append(i)
+                
                 tempNode = (nextx, nexty)
                 tempSucc = (tempNode, edges)
                 successors.append((tempSucc, action, 1))
@@ -375,11 +376,12 @@ def cornersHeuristic(state, problem):
     shortest path from the state to a goal of the problem; i.e.  it should be
     admissible (as well as consistent).
     """
+    # check if we have a valid starting state
     if len(state[1]) == 0:
         return 0
 
     heuristic = []
-
+    # go through all corners and calculate the distances in the x and y direction
     for i in range(len(state[1])):
         curState = state[1][i]
         dx = curState[0] - state[0][0]
@@ -388,7 +390,7 @@ def cornersHeuristic(state, problem):
         dy = abs(dy)
         heuristic.append(dx + dy)
 
-
+    # return our best guess
     bestGuess = max(heuristic)
     return bestGuess
 
@@ -482,13 +484,19 @@ def foodHeuristic(state, problem):
     Subsequent calls to this heuristic can access
     problem.heuristicInfo['wallCount']
     """
+    # get initial position and food grid
     position, foodGrid = state
+
+    # turn food grid into list so we can iterate through it
     foodGrid = foodGrid.asList()
+    # define heuristic array
     heuristic = [0]
     for exists in foodGrid:
+        # calculate heurisitcs for all food in the foodgrid
         tempDist = mazeDistance(position, exists, problem.startingGameState)
         heuristic.append(tempDist)
 
+    # return the max of our heurisitc this will be the best guess
     bestGuess = max(heuristic)
     return bestGuess
 

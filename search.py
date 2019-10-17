@@ -92,6 +92,9 @@ def depthFirstSearch(problem):
     "*** YOUR CODE HERE ***"
 
     # start by popping the initial node into the stack
+    # DFS needs the following :
+    # a stack, starting position, directions it can travel from one node to the next and a visited array
+    
     startNode = problem.getStartState()
     stack = util.Stack()
     initialPath = []
@@ -104,6 +107,7 @@ def depthFirstSearch(problem):
     while not stack.isEmpty():
         curNode, pathTaken = stack.pop()
         
+        # once we find our goal node we can simply return the path we took
         if (problem.isGoalState(curNode)):
             return pathTaken
             
@@ -123,7 +127,9 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
- # start by popping the initial node into the q
+
+    # BFS is pretty much the same as DFS except we are using a queue instead of a stack
+    # start by popping the initial node into the q
     startNode = problem.getStartState()
     q = util.Queue()
     initialPath = []
@@ -148,6 +154,8 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+
+    #UCS is just BFS with a priority queue vs a regular queue
     startNode = problem.getStartState()
     pQ = util.PriorityQueue()
     initialPath = []
@@ -167,6 +175,7 @@ def uniformCostSearch(problem):
             neighbors = problem.getSuccessors(curNode)
             for neighbor in neighbors:
                 tempPath = pathTaken + [neighbor[1]]
+                # calculate cost since we're using a pq instead of a queue
                 tempCost = curCost + neighbor[2]
                 pQ.update((neighbor[0], tempPath, tempCost), tempCost)
 
@@ -183,6 +192,8 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
 
+    #A-Star search is just UCS with a heuristic that is used to calculate the cost instead of us using the actual cost
+
     startNode = problem.getStartState()
     pQ = util.PriorityQueue()
     initialPath = []
@@ -203,6 +214,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             for neighbor in neighbors:
                 tempPath = pathTaken + [neighbor[1]]
                 tempCost = curCost + neighbor[2]
+                # add heuristic here, otherwise code is same as UCS
                 pQ.update((neighbor[0], tempPath, tempCost), tempCost + heuristic(neighbor[0], problem))
 
     
